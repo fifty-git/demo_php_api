@@ -5,7 +5,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 use \App\Controllers\EmployeeController;
 use \App\Controllers\SampleProductController;
 
-$app->get('/api2/', function (Request $request, Response $response) {
+$app->get('/api2[/]', function (Request $request, Response $response) {
     $this->logger->info("IN BASE ENDPOINT");
     $response->getBody()->write("Hello World!");
     return $response;

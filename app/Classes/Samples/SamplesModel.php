@@ -20,7 +20,6 @@ class SamplesModel
 
     public function getProductsWithLimitSql($limit)
     {
-        $lim = (!empty($limit)) ? $limit : 10;
         $sql = "SELECT
           cart_products.product_id,
           cart_products.product_name,
@@ -30,7 +29,7 @@ class SamplesModel
           cart_products
           WHERE
           cart_products.product_id > 100 
-          LIMIT $lim";
+          LIMIT $limit";
 
         $bindValues = array();
         $resultArray = $this->sqlHandler->fetchAll($sql, $bindValues);

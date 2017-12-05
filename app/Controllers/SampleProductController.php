@@ -25,7 +25,7 @@ class SampleProductController extends Controller
 
     public function show($request, $response, $args)
     {
-        $sqlLimit = $args['limit'];
+        $sqlLimit = (!empty($args['limit'])) ? $args['limit'] : 10;
         $result = $this->prodHandler->getProductsWithLimit($sqlLimit);
         return $response->withJson($result);
     }
