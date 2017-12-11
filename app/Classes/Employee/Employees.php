@@ -2,34 +2,33 @@
 
 namespace App\Classes\Employee;
 
+use App\Classes\Employee\EmployeeModel;
 
 /**
  * summary
  */
 class Employees
 {
+    private $c;
+    private $logger;
+    private $emplModel;
 
-  private $pdo;
+    public function __construct($c)
+    {
+        $this->c = $c;
+        $this->logger = $this->c['logger'];
+        $this->emplModel = new EmployeeModel($this->c);
+    }
 
-  public function __construct($pdo)
-  {
-    $this->pdo = $pdo;      
-  }
+    public function getAllEmployees()
+    {
+        $employees = $this->emplModel->getAllEmployeesSql();
+        return $employees;
+    }
 
-  public function getAllEmployees()
-  {
-    $employees = $this->pdo->query('SELECT * FROM employees')->fetchAll($this->pdo::FETCH_ASSOC); 
-    return $employees;
-  }
-
-  public function insertNewEmployee($dataArray)
-  {
-    $name = $dataArray['name'];
-    $position = $dataArray['position'];
-
-    $stmt = $this->pdo->prepare("INSERT INTO employees(name, position) 
-      VALUES(:name, :position)"); 
-
-    return $stmt->execute(array("name"=>$name, "position"=>$position));
-  }
+    public function insertNewEmployee($dataArray)
+    {
+        $result = $this->emplModel->insertNewEmployeeSql($dataArray);
+        return $result;
+    }
 }

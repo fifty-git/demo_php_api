@@ -16,7 +16,7 @@ class SqlModel
 
     public function __construct()
     {
-        $ini_array = parse_ini_file("../bootstrap/dbconf.ini");
+        $ini_array = parse_ini_file("bootstrap/dbconf.ini");
         $this->host = $ini_array['db-host'];
         $this->dbName = $ini_array['db-name'];
         $this->dbUsername = $ini_array['db-user'];

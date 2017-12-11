@@ -11,26 +11,25 @@ use Dflydev\FigCookies\FigResponseCookies;
 class EmployeeController extends Controller
 {
     private $empHandler;
-    protected $c;
-    protected $pdo;
-    protected $logger;
 
     public function __construct($c)
     {
-        $this->c = $c;
-        $this->pdo = $this->c['db'];
-        $this->logger = $this->c['logger'];
-        $this->empHandler = new Employees($this->pdo);
+        parent::__construct($c);
+        $this->empHandler = new Employees($this->c);
     }
 
     public function index($request, $response)
     {
-        $employees = $this->empHandler->getAllEmployees();
-        $this->logger->info("All Employee Results", $employees);
-        return $response->withJson($employees);
+        $status = $response->getStatusCode();
+        if ($status == 200) {
+            $employees = $this->empHandler->getAllEmployees();
+            return $response->withJson($employees);
+        } else {
+            $error = $this->errorHandler->getJsonError($response);
+        }
     }
 
-    public function show()
+    public function show($request, $response)
     {
         // show specific employee
         $this->logger->info("Employee Results");
@@ -41,14 +40,12 @@ class EmployeeController extends Controller
     {
         $reqData = $request->getParsedBody();
         if (!empty($reqData)) {
-            $result = $this->empHandler->insertNewEmployee($reqData);
+            $empId = $this->empHandler->insertNewEmployee($reqData);
             $cookie = FigRequestCookies::get($request, 'TestCookie');
-            error_log($cookie);
             $cookieValues = explode('=', $cookie);
-      
 
-            if ($result) {
-                return $response->withJson(array('Response'=>'Success', 'token'=>$cookieValues[1]), 201);
+            if ($empId) {
+                return $response->withJson(array('Response'=>'Success', 'token'=>$cookieValues[1], 'empID'=>$empId), 201);
             } else {
                 return $response->withJson(array('Response'=>'Failed to Write'), 500);
             }
