@@ -9,15 +9,11 @@ use Lib\SqlModel;
  */
 class EmployeeModel
 {
-    private $c;
-    private $logger;
     private $sqlHandler;
 
-    public function __construct($c)
+    public function __construct(SqlModel $sqlModel)
     {
-        $this->c = $c;
-        $this->logger = $this->c['logger'];
-        $this->sqlHandler = new SqlModel();
+        $this->sqlHandler = $sqlModel;
     }
 
     public function getAllEmployeesSql()

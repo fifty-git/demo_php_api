@@ -1,27 +1,32 @@
 <?php
 namespace App\Controllers;
 
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use App\Classes\Employee\Employees;
 use Dflydev\FigCookies\FigRequestCookies;
 use Dflydev\FigCookies\FigResponseCookies;
+use Monolog\Logger as Logger;
 
 /**
  * summary
  */
-class EmployeeController extends Controller
+class EmployeeController
 {
     private $empHandler;
+    private $logger;
 
-    public function __construct($c)
+    public function __construct(Employees $employeeHandler, Logger $logger)
     {
-        parent::__construct($c);
-        $this->empHandler = new Employees($this->c);
+        $this->empHandler = $employeeHandler;
+        $this->logger = $logger;
     }
 
-    public function index($request, $response)
+    public function index(Request $request, Response $response)
     {
         $status = $response->getStatusCode();
         if ($status == 200) {
+            $this->logger->info('IN THE EMPLOYEE LIST');
             $employees = $this->empHandler->getAllEmployees();
             return $response->withJson($employees);
         } else {
