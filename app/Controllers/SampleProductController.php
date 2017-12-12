@@ -23,10 +23,9 @@ class SampleProductController
         return $response->withJson(array('id'=>1,'name'=>'Joe'));
     }
 
-    public function show($limit = 10, Request $request, Response $response)
+    public function show(Request $request, Response $response, $limit = 10)
     {
-        $sqlLimit = (!empty($limit)) ? $limit : 10;
-        $result = $this->prodHandler->getProductsWithLimit($sqlLimit);
+        $result = $this->prodHandler->getProductsWithLimit($limit);
         return $response->withJson($result);
     }
 }
