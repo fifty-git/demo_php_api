@@ -6,15 +6,14 @@ use \App\Controllers\EmployeeController;
 use \App\Controllers\SampleProductController;
 
 $app->get('/api2[/]', function (Request $request, Response $response) {
-    $this->logger->info("IN BASE ENDPOINT");
     $response->getBody()->write("Hello World!");
     return $response;
 });
 
-$app->get('/api2/products[/{limit}]', SampleProductController::class . ':show');
+$app->get('/api2/products[/{limit}]', ['\App\Controllers\SampleProductController', 'show']);
 
 $app->group('/api2/employees', function () {
-    $this->get('/', EmployeeController::class . ':index');
-    $this->get('/{id}', EmployeeController::class . ':show');
-    $this->post('/', EmployeeController::class . ':post');
+    $this->get('/', ['\App\Controllers\EmployeeController', 'index']);
+    $this->get('/{id}', ['\App\Controllers\EmployeeController', 'show']);
+    $this->post('/', ['\App\Controllers\EmployeeController', 'post']);
 });

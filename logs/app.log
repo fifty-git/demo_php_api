@@ -1,2 +1,3 @@
-[2017-12-08 16:59:29] demo_logger.INFO: Getting all employees [] []
-[2017-12-08 16:59:29] demo_logger.INFO: IN GET EMPLOYEES [] []
+[2017-12-12 16:41:34] demo_logger.INFO: IN THE EMPLOYEE LIST [] []
+[2017-12-12 16:41:51] demo_logger.INFO: IN THE EMPLOYEE LIST [] []
+[2017-12-12 16:41:55] demo_logger.INFO: Employee Results [] []

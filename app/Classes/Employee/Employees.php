@@ -9,15 +9,11 @@ use App\Classes\Employee\EmployeeModel;
  */
 class Employees
 {
-    private $c;
-    private $logger;
     private $emplModel;
 
-    public function __construct($c)
+    public function __construct(EmployeeModel $emplModel)
     {
-        $this->c = $c;
-        $this->logger = $this->c['logger'];
-        $this->emplModel = new EmployeeModel($this->c);
+        $this->emplModel = $emplModel;
     }
 
     public function getAllEmployees()

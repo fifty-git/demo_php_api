@@ -10,12 +10,10 @@ use App\Classes\Samples\SamplesModel;
 class SampleProducts
 {
     private $sqlHandle;
-    private $c;
 
-    public function __construct($c)
+    public function __construct(SamplesModel $samplesModel)
     {
-        $this->c = $c;
-        $this->samplesSql = new SamplesModel($this->c);
+        $this->samplesSql = $samplesModel;
     }
 
     public function getProductsWithLimit($limit)
