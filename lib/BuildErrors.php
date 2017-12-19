@@ -21,10 +21,10 @@ class BuildErrors
     {
         $errorData = $this->getErrorDetailsSql($errorCode);
         
-        $errorType = $errorData['er_error_type'];
+        $errorType = $errorData['error_type'];
         $errorUrl = "https://errors.fiftyflowers.com/$errorCode";
-        $errorMessage = $errorData['er_error_message'];
-        $setStatus = (int)$errorData['er_status_code'];
+        $errorMessage = $errorData['error_message'];
+        $setStatus = (int)$errorData['status_code'];
 
         $problem = new ApiProblem($errorType, $errorUrl);
         $problem->setDetail($errorMessage);
@@ -39,9 +39,16 @@ class BuildErrors
 
     private function getErrorDetailsSql($errorCode)
     {
-        $sql = "SELECT * 
-        FROM api_error_data 
-        WHERE er_error_code = :errorCode";
+        $sql = "SELECT
+        api_error_data.er_error_code as error_code,
+        api_error_data.er_status_code as status_code,
+        api_error_data.er_error_message as error_message,
+        api_error_types.et_error_type as error_type
+        FROM
+        api_error_data
+        JOIN api_error_types
+        ON api_error_data.er_error_type_id = api_error_types.et_id
+        WHERE api_error_data.er_error_code = :errorCode";
 
         $bindValues = array('errorCode'=>$errorCode);
         $errorData = $this->sqlHandler->fetchFirstRow($sql, $bindValues);
