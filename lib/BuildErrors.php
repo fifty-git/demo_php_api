@@ -27,6 +27,7 @@ class BuildErrors
         $setStatus = (int)$errorData['status_code'];
 
         $problem = new ApiProblem($errorType, $errorUrl);
+        $problem['error'] = true;
         $problem->setDetail($errorMessage);
         $problem->setInstance($requestUri);
         $newResponse = $response

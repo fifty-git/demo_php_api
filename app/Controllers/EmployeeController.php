@@ -7,6 +7,7 @@ use App\Classes\Employee\Employees;
 use Dflydev\FigCookies\FigRequestCookies;
 use Dflydev\FigCookies\FigResponseCookies;
 use Monolog\Logger as Logger;
+use Lib\BuildErrors;
 
 /**
  * summary
@@ -16,21 +17,33 @@ class EmployeeController
     private $empHandler;
     private $logger;
 
-    public function __construct(Employees $employeeHandler, Logger $logger)
-    {
+    public function __construct(
+        Employees $employeeHandler,
+        Logger $logger,
+        BuildErrors $buildErrors
+    ) {
         $this->empHandler = $employeeHandler;
         $this->logger = $logger;
+        $this->buildErrors = $buildErrors;
     }
 
     public function index(Request $request, Response $response)
     {
+        $employees = $this->empHandler->getAllEmployees();
         $status = $response->getStatusCode();
         if ($status == 200) {
-            $this->logger->info('IN THE EMPLOYEE LIST');
-            $employees = $this->empHandler->getAllEmployees();
-            return $response->withJson($employees);
+            if (!empty($employees)) {
+                return $response->withJson($employees);
+            } else {
+                $this->logger->info('Returned empty employee list');
+                $reqUri = $_SERVER['REQUEST_URI'];
+                $errorCode = 'val_100'; // no records found
+                return $this->buildErrors->getJsonError($response, $reqUri, $errorCode);
+            }
         } else {
-            $error = $this->errorHandler->getJsonError($response);
+            $this->logger->info('NON-200 Status Code: ' . $status);
+            $reqUri = $_SERVER['REQUEST_URI'];
+            return $this->buildErrors->getJsonError($response, $reqUri, $errorCode);
         }
     }
 
