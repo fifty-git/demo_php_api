@@ -18,7 +18,7 @@ class EmployeeModel
 
     public function getAllEmployeesSql()
     {
-        $sql = "SELECT * FROM employees";
+        $sql = "SELECT * FROM employees WHERE name = 'ZIPPY'";
         
         $bindValues = array();
         $resultArray = $this->sqlHandler->fetchAll($sql, $bindValues);
